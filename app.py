@@ -155,10 +155,20 @@ ADAPTER_SPECS = {
         "weights": "next-scene_lora-v2-3000.safetensors",
         "adapter_name": "next-scene"
     },
+    "Flat-Log": {
+        "repo": "tlennon-ie/QwenEdit2509-FlatLogColor",
+        "weights": "QwenEdit2509-FlatLogColor.safetensors",
+        "adapter_name": "flat-log"
+    },
     "Upscale-Image": {
         "repo": "vafipas663/Qwen-Edit-2509-Upscale-LoRA",
         "weights": "qwen-edit-enhance_64-v3_000001000.safetensors",
         "adapter_name": "upscale-image"
+    },
+    "Upscale2K": {
+        "repo": "valiantcat/Qwen-Image-Edit-2509-Upscale2K",
+        "weights": "qwen_image_edit_2509_upscale.safetensors",
+        "adapter_name": "upscale-2k"
     }
 }
 
@@ -186,7 +196,7 @@ def update_dimensions_on_upload(image):
     
     return new_width, new_height
 
-@spaces.GPU(duration=30)
+@spaces.GPU
 def infer(
     input_image,
     prompt,
@@ -261,7 +271,7 @@ def infer(
         gc.collect()
         torch.cuda.empty_cache()
 
-@spaces.GPU(duration=30)
+@spaces.GPU
 def infer_example(input_image, prompt, lora_adapter):
     if input_image is None:
         return None, 0
@@ -319,6 +329,7 @@ with gr.Blocks() as demo:
                 ["examples/5.jpg", "Remove shadows and relight the image using soft lighting.", "Light-Restoration"],
                 ["examples/4.jpg", "Use a subtle golden-hour filter with smooth light diffusion.", "Relight"],
                 ["examples/2.jpeg", "Rotate the camera 45 degrees to the left.", "Multiple-Angles"],
+                ["examples/12.jpg", "flatcolor Desaturate the image and lower the contrast to create a flat, ungraded look similar to a camera log profile. Preserve details in the highlights and shadows.", "Flat-Log"],
                 ["examples/7.jpg", "Light source from the Right Rear", "Multi-Angle-Lighting"],
                 ["examples/10.jpeg", "Upscale the image.", "Upscale-Image"],
                 ["examples/7.jpg", "Light source from the Below", "Multi-Angle-Lighting"],
@@ -330,6 +341,7 @@ with gr.Blocks() as demo:
                 ["examples/4.jpg", "Rotate the camera 45 degrees to the right.", "Multiple-Angles"],
                 ["examples/4.jpg", "Switch the camera to a top-down view.", "Multiple-Angles"],
                 ["examples/4.jpg", "Switch the camera to a wide-angle lens.", "Multiple-Angles"],
+                ["examples/11.jpg", "Upscale this picture to 4K resolution.", "Upscale2K"],
             ],
             inputs=[input_image, prompt, lora_adapter],
             outputs=[output_image, seed],
