@@ -101,8 +101,7 @@ dtype = torch.bfloat16
 pipe = QwenImageEditPlusPipeline.from_pretrained(
     "Qwen/Qwen-Image-Edit-2509",
     transformer=QwenImageTransformer2DModel.from_pretrained(
-        "linoyts/Qwen-Image-Edit-Rapid-AIO",
-        subfolder='transformer',
+        "prithivMLmods/Qwen-Image-Edit-Rapid-AIO-V4", # -> diffusers compatiable transformer weights extracted from [Phr00t/Qwen-Image-Edit-Rapid-AIO]
         torch_dtype=dtype,
         device_map='cuda'
     ),
@@ -118,7 +117,6 @@ except Exception as e:
 
 MAX_SEED = np.iinfo(np.int32).max
 
-# Define the config for all adapters
 ADAPTER_SPECS = {
     "Photo-to-Anime": {
         "repo": "autoweeb/Qwen-Image-Edit-2509-Photo-to-Anime",
@@ -169,10 +167,14 @@ ADAPTER_SPECS = {
         "repo": "valiantcat/Qwen-Image-Edit-2509-Upscale2K",
         "weights": "qwen_image_edit_2509_upscale.safetensors",
         "adapter_name": "upscale-2k"
-    }
+    },
+    "Dotted-Illustration": {
+        "repo": "prithivMLmods/QIE-2509-Dotted-Illustration",
+        "weights": "dotted-illustration-2800.safetensors",
+        "adapter_name": "dotted-illustration"
+    },
 }
 
-# Track what is currently loaded in memory
 LOADED_ADAPTERS = set()
 
 def update_dimensions_on_upload(image):
@@ -287,13 +289,13 @@ css="""
     margin: 0 auto;
     max-width: 960px;
 }
-#main-title h1 {font-size: 2.1em !important;}
+#main-title h1 {font-size: 2.4em !important;}
 """
 
 with gr.Blocks() as demo:
     with gr.Column(elem_id="col-container"):
         gr.Markdown("# **Qwen-Image-Edit-2509-LoRAs-Fast**", elem_id="main-title")
-        gr.Markdown("Perform diverse image edits using specialized [LoRA](https://huggingface.co/models?other=base_model:adapter:Qwen/Qwen-Image-Edit-2509) adapters for the [Qwen-Image-Edit](https://huggingface.co/Qwen/Qwen-Image-Edit-2509) model.")
+        gr.Markdown("Perform diverse image edits using specialized [LoRA](https://huggingface.co/models?other=base_model:adapter:Qwen/Qwen-Image-Edit-2509) adapters for the [Qwen-Image-Edit](https://huggingface.co/Qwen/Qwen-Image-Edit-2509) model. Open on [GitHub](https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load).")
 
         with gr.Row(equal_height=True):
             with gr.Column():
@@ -332,6 +334,7 @@ with gr.Blocks() as demo:
                 ["examples/12.jpg", "flatcolor Desaturate the image and lower the contrast to create a flat, ungraded look similar to a camera log profile. Preserve details in the highlights and shadows.", "Flat-Log"],
                 ["examples/7.jpg", "Light source from the Right Rear", "Multi-Angle-Lighting"],
                 ["examples/10.jpeg", "Upscale the image.", "Upscale-Image"],
+                ["examples/DI.jpg", "dotted illustration.", "Dotted-Illustration"],
                 ["examples/7.jpg", "Light source from the Below", "Multi-Angle-Lighting"],
                 ["examples/2.jpeg", "Switch the camera to a top-down right corner view.", "Multiple-Angles"],
                 ["examples/9.jpg", "The camera moves slightly forward as sunlight breaks through the clouds, casting a soft glow around the character's silhouette in the mist. Realistic cinematic style, atmospheric depth.", "Next-Scene"],
