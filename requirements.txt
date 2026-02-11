@@ -11,4 +11,5 @@ spaces
 hf_xet
 torch
 numpy
+gradio #gradio@6.3.0
 av
