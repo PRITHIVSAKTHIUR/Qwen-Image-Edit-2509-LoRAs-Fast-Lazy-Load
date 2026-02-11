@@ -43,9 +43,11 @@
    torchvision
    supervision
    kernels
+   gradio #gradio@6.3.0
    spaces
    torch
    numpy
+   av
    ```
 
 3. Start the application:
