@@ -1,15 +1,15 @@
+git+https://github.com/huggingface/transformers.git@v4.57.3
 git+https://github.com/huggingface/accelerate.git
 git+https://github.com/huggingface/diffusers.git
 git+https://github.com/huggingface/peft.git
-transformers==4.57.1
 huggingface_hub
 sentencepiece 
 torchvision
 supervision
 kernels
 spaces
+gradio
 hf_xet
-torch
+torch==2.11.0
 numpy
-gradio #gradio@6.3.0
 av
