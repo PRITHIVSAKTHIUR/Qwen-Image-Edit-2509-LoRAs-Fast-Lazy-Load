@@ -58,6 +58,37 @@
    ```
    The demo launches at `http://localhost:7860` (or the provided URL if using Spaces).
 
+---
+
+### **Running with uv (Recommended)**
+
+[`uv`](https://github.com/astral-sh/uv) is a fast Python package manager that provides fully reproducible installs via a lock file.
+
+**Step 1 — Install uv**
+```bash
+curl -Ls https://astral.sh/uv/install.sh | sh
+```
+
+**Step 2 — Clone the repository**
+```bash
+git clone https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load.git
+cd Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load
+```
+
+**Step 3 — Initialize the project and install dependencies**
+```bash
+uv init
+uv add -r requirements.txt
+```
+This resolves all packages and generates a `uv.lock` file for reproducible installs.
+
+**Step 4 — Run the script**
+```bash
+uv run python app.py
+```
+
+---
+
 ## Usage
 
 1. **Upload Image**: Select a single image (PIL format, height up to 290px preview).
