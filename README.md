@@ -2,6 +2,8 @@
 
 > A Gradio-based demonstration for the Qwen/Qwen-Image-Edit-2509 model, featuring lazy-loaded LoRA adapters for fast, specialized image edits like photo-to-anime conversion, angle changes, lighting restoration, skin editing, and upscaling. Supports single-image inputs with descriptive prompts; adapters load on-demand to optimize memory. Enhanced with Flash Attention 3 for efficient inference.
 
+<img width="1741" height="1492" alt="screencapture-huggingface-co-spaces-prithivMLmods-Qwen-Image-Edit-2509-LoRAs-Fast-2026-05-20-01_23_33" src="https://github.com/user-attachments/assets/9b7bf7c1-716d-4fcb-82d7-a263c49ef30f" />
+
 ## Features
 
 - **Lazy LoRA Loading**: 8 specialized adapters (e.g., Photo-to-Anime, Relight) download and activate only when selected, reducing initial load time.
