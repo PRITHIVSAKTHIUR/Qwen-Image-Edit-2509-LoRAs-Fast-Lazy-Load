@@ -36,18 +36,19 @@
 
    **requirements.txt content:**
    ```
+   git+https://github.com/huggingface/transformers.git@v4.57.3
    git+https://github.com/huggingface/accelerate.git
    git+https://github.com/huggingface/diffusers.git
    git+https://github.com/huggingface/peft.git
    huggingface_hub
-   sentencepiece
-   transformers
+   sentencepiece 
    torchvision
    supervision
    kernels
-   gradio #gradio@6.3.0
    spaces
-   torch
+   gradio
+   hf_xet
+   torch==2.11.0
    numpy
    av
    ```
