@@ -157,4 +157,4 @@ Repository: [https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-
 
 Apache License 2.0. See [LICENSE](LICENSE) for details.
 
-Built by [Prithiv Sakthi](https://github.com/PRITHIVSAKTHIUR). Report issues via the repository.
+Built by [Prithiv Sakthi](https://github.com/PRITHIVSAKTHIUR). Report issues via the [repository](https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load/issues).
