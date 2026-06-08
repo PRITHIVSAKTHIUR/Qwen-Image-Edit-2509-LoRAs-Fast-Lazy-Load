@@ -46,7 +46,7 @@
    supervision
    kernels
    spaces
-   gradio
+   gradio==6.17.3
    hf_xet
    torch==2.11.0
    numpy
