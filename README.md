@@ -1,158 +1,193 @@
-# **[Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load](https://huggingface.co/spaces/prithivMLmods/Qwen-Image-Edit-2509-LoRAs-Fast)**
+# **Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load**
 
-A Gradio-based demonstration for the Qwen/Qwen-Image-Edit-2509 model, featuring lazy-loaded LoRA adapters for fast, specialized image edits like photo-to-anime conversion, angle changes, lighting restoration, skin editing, and upscaling. Supports single-image inputs with descriptive prompts; adapters load on-demand to optimize memory. Enhanced with Flash Attention 3 for efficient inference.
+Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load is an experimental, high-performance image editing and style-transfer sandbox built on top of the `Qwen/Qwen-Image-Edit-2509` base model. Powered by a deeply optimized transformer backbone (`prithivMLmods/Qwen-Image-Edit-Rapid-AIO-V4`) and accelerated via Flash Attention 3 (`QwenDoubleStreamAttnProcessorFA3`), this application delivers ultra-fast, 4-step image refinement directly in pixel space.
 
-## Features
+The application features an adaptive **Lazy Loading architecture** for LoRA adapters. Weights for its 11+ specialized multi-angle, relighting, and illustration models are pulled and hot-fused into the inference state dynamically only upon request. The system is wrapped in a highly responsive, custom Iris-themed UI containing client-side JavaScript drag-and-drop mechanics, immediate example loading, and automated image parameter snapping.
 
-- **Lazy LoRA Loading**: 8 specialized adapters (e.g., Photo-to-Anime, Relight) download and activate only when selected, reducing initial load time.
-- **Single-Image Editing**: Upload one image and apply edits via prompts (e.g., "Transform into anime").
-- **Rapid Inference**: 4-step default generations with bfloat16 and optional Flash Attention 3; auto-resizes outputs to match aspect (multiples of 8).
-- **Advanced Controls**: Hidden accordion for seed randomization, guidance scale (1-10), and steps (1-50).
-- **Custom Theme**: OrangeRedTheme with gradients and responsive CSS for a clean UI.
-- **Examples**: 15 pre-loaded inputs for quick testing (e.g., multi-angle views, next-scene transitions).
-- **Queueing Support**: Up to 30 concurrent jobs with 300s cache for smooth usage.
+### **Key Features**
 
-<img width="1733" height="1498" alt="image" src="https://github.com/user-attachments/assets/8f56b028-a368-4807-bb5f-5aedbbd035c3" />
+* **Lazy-Loaded LoRA Hub:** On-demand downloading and weight-fusing for 11+ pre-configured specialized LoRA adapters (including *Photo-to-Anime*, *Multiple-Angles*, *Light-Restoration*, *Relight*, *Multi-Angle-Lighting*, *Edit-Skin*, *Next-Scene*, *Flat-Log*, *Upscale-Image*, *Upscale2K*, and *Dotted-Illustration*).
+* **Flash Attention 3 (FA3) Acceleration:** Wire-fused with a custom `QwenDoubleStreamAttnProcessorFA3` handler to drastically compress VRAM allocation and boost step-by-step cross-attention calculations.
+* **Smart Dimension Snapping:** Automatically scales uploaded reference images so that the longer side stays under 1024px while snapping both width and height to strict multiples of 8, preventing tensor geometry faults.
+* **Polished In-App Shell UI:** Replaces generic block items with a premium web console featuring deep slate and iris gradients, responsive action menus, custom suggestion chips, and zero-flicker launch button animations.
+* **Transient VRAM Governance:** Tailored for seamless integration with `spaces.GPU` context streams, executing full python-side trash collections (`gc.collect()`) and cache purges before and after every diffusion run.
 
-## Prerequisites
+### **Repository Structure**
 
-- Python 3.10 or higher.
-- CUDA-compatible GPU (recommended for bfloat16; falls back to CPU).
-- Stable internet for initial model/LoRA downloads.
+```text
+├── examples/
+│   ├── 1.jpg
+│   ├── 10.jpeg
+│   ├── 11.jpg
+│   ├── 12.jpg
+│   ├── 13.jpg
+│   ├── 14.jpg
+│   ├── 2.jpeg
+│   ├── 4.jpg
+│   ├── 5.jpg
+│   ├── 6.jpg
+│   ├── 7.jpg
+│   ├── 8.jpg
+│   ├── 9.jpg
+│   ├── DI.jpg
+│   └── ELS.jpg
+├── qwenimage/
+│   ├── __init__.py
+│   ├── pipeline_qwenimage_edit_plus.py
+│   ├── qwen_fa3_processor.py
+│   └── transformer_qwenimage.py
+├── app.py
+├── LICENSE
+├── pre-requirements.txt
+├── pyproject.toml
+├── README.md
+├── requirements.txt
+└── uv.lock
 
-## Installation
+```
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load.git
-   cd Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load
-   ```
+### **Installation and Requirements**
 
-2. Install dependencies:
-   Create a `requirements.txt` file with the following content, then run:
-   ```
-   pip install -r requirements.txt
-   ```
+To initialize the Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load space locally, verify your host is configured with the specialized environment and compiled dependencies detailed below. A dedicated CUDA-compatible GPU is required.
 
-   **requirements.txt content:**
-   ```
-   git+https://github.com/huggingface/transformers.git@v4.57.3
-   git+https://github.com/huggingface/accelerate.git
-   git+https://github.com/huggingface/diffusers.git
-   git+https://github.com/huggingface/peft.git
-   huggingface_hub
-   sentencepiece 
-   torchvision
-   supervision
-   kernels
-   spaces
-   gradio==6.17.3
-   hf_xet
-   torch==2.11.0
-   numpy
-   av
-   ```
+* **Python Version:** Minimum Python **3.12** is needed, though Python **3.14** is recommended for peak optimization.
+* **PyTorch Version:** `torch==2.11.0` or above is required for cross-attention architecture compatibility.
+* **CUDA Hardware Layer:** CUDA **13.0** is recommended to mirror the live Hugging Face production environment.
 
-3. Start the application:
-   ```
-   python app.py
-   ```
-   The demo launches at `http://localhost:7860` (or the provided URL if using Spaces).
+#### **Running with `uv` (Recommended)**
 
----
+`uv` is an ultra-fast Python package and project manager written in Rust, which ensures rapid virtual environment synchronization and reproducible dependency execution loops.
 
-### **Running with uv (Recommended)**
+**Step 1 — Install `uv`**
 
-`uv` is an ultra-fast Python package installer and dependency resolver. It isolates execution contexts instantly and securely.
+* **macOS / Linux:** `curl -LsSf [https://astral.sh/uv/install.sh](https://astral.sh/uv/install.sh) | sh`
+* **Windows:** `powershell -c "irm [https://astral.sh/uv/install.ps1](https://astral.sh/uv/install.ps1) | iex"`
 
-**1. Install `uv`**
-
-* **Linux / macOS:** `curl -LsSf https://astral.sh/uv/install.sh | sh`
-* **Windows (PowerShell):** `powershell -c "irm https://astral.sh/uv/install.ps1 | iex"`
-
-**2. Clone and Synchronize the Workspace**
+**Step 2 — Clone the repository**
 
 ```bash
 git clone https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load.git
 cd Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load
+
+```
+
+**Step 3 — Initialize the project and install dependencies**
+
+```bash
 uv sync
 
 ```
 
-**3. Launch the Web Interface**
+**Step 4 — Run the script**
 
 ```bash
 uv run app.py
 
 ```
 
----
+#### **Standard PIP Installation**
 
-## Usage
+**1. Upgrade Package Manager**
+Update your system installer prior to fetching modern pre-compiled wheel distributions:
 
-1. **Upload Image**: Select a single image (PIL format, height up to 290px preview).
+```bash
+pip install pip>=26.1.2
 
-2. **Select Adapter**: Dropdown for styles (default: "Photo-to-Anime").
+```
 
-3. **Enter Prompt**: Describe the edit (e.g., "Rotate the camera 45 degrees to the left").
+**2. Core Dependency Pull**
+Install the primary deep learning stack, core transformer builds, and layout engine libraries from your local `requirements.txt` file:
 
-4. **Configure (Optional)**: Expand "Advanced Settings" for seed, guidance, steps.
+```bash
+pip install -r requirements.txt
 
-5. **Edit Image**: Click "Edit Image"; outputs the transformed image with seed displayed.
+```
 
-### Supported Adapters
+#### **Core Requirements List (`requirements.txt`)**
 
-| Adapter              | Use Case                          |
-|----------------------|-----------------------------------|
-| Photo-to-Anime      | Style transfer to anime aesthetics |
-| Multiple-Angles     | Camera rotation/view changes     |
-| Light-Restoration   | Shadow removal and relighting    |
-| Relight             | Lighting adjustments             |
-| Multi-Angle-Lighting| Dynamic multi-view lighting      |
-| Edit-Skin           | Skin detail enhancement          |
-| Next-Scene          | Sequential scene transitions     |
-| Upscale-Image       | Resolution upscaling             |
+```text
+torch==2.11.0
+torchvision==0.26.0
+transformers==5.14.1
+accelerate==1.14.0
+diffusers==0.39.0
+peft==0.19.1
+tokenizers==0.22.2
+sentencepiece==0.2.2
+safetensors==0.8.0
+gradio==6.20.0
+gradio-client==2.5.0
+hf-gradio==0.4.1
+spaces==0.51.0
+fastapi==0.139.1
+starlette==1.3.1
+uvicorn==0.51.0
+pydantic==2.12.5
+pydantic-core==2.41.5
+pydantic-settings==2.14.2
+typing-inspection==0.4.2
+python-multipart==0.0.32
+orjson==3.11.9
+httpx-sse==0.4.3
+websockets==16.1
+mcp==1.28.1
+platformdirs==4.10.0
+psutil==7.2.2
+regex==2026.7.10
+pillow==12.3.0
+av==18.0.0
+pydub==0.25.1
+authlib==1.7.2
+cryptography==49.0.0
+pyOpenSSL==26.3.0
+cffi==2.1.0
+pycparser==3.0
+email-validator==2.3.0
+dnspython==2.8.0
+python-dotenv==1.2.2
+itsdangerous==2.2.0
+pyjwt==2.13.0
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+referencing==0.37.0
+rpds-py==2026.6.3
+annotated-types==0.7.0
+semantic-version==2.10.0
+tomlkit==0.14.0
+importlib_metadata==9.0.0
+zipp==4.1.0
+pytz==2026.2
+safehttpx==0.1.7
+brotli==1.2.0
+groovy==0.1.2
+id==1.6.1
+joserfc==1.7.3
+kernels==0.16.0
+kernels-data==0.16.0
+rfc3161-client==1.0.7
+rfc8785==0.1.4
+securesystemslib==1.4.0
+sigstore==4.4.0
+sigstore-models==0.0.6
+sigstore-rekor-types==0.0.18
+sse-starlette==3.4.5
+tuf==7.0.0
 
-## Examples
+# scientific computing
+numpy==2.4.6
+```
 
-| Input Image    | Prompt Example                                      | Adapter              |
-|----------------|-----------------------------------------------------|----------------------|
-| examples/1.jpg | "Transform into anime."                            | Photo-to-Anime      |
-| examples/5.jpg | "Remove shadows and relight using soft lighting."  | Light-Restoration   |
-| examples/4.jpg | "Use a subtle golden-hour filter."                 | Relight             |
-| examples/2.jpeg| "Rotate the camera 45 degrees to the left."        | Multiple-Angles     |
-| examples/7.jpg | "Light source from the Right Rear."                | Multi-Angle-Lighting|
-| examples/10.jpeg| "Upscale the image."                               | Upscale-Image       |
-| examples/7.jpg | "Light source from the Below."                     | Multi-Angle-Lighting|
-| examples/2.jpeg| "Switch to a top-down right corner view."          | Multiple-Angles     |
-| examples/9.jpg | "Camera moves forward as sunlight breaks through." | Next-Scene          |
-| examples/8.jpg | "Make skin details more prominent and natural."    | Edit-Skin           |
-| examples/6.jpg | "Switch to a bottom-up view."                      | Multiple-Angles     |
-| examples/6.jpg | "Rotate the camera 180 degrees upside down."       | Multiple-Angles     |
-| examples/4.jpg | "Rotate the camera 45 degrees to the right."       | Multiple-Angles     |
-| examples/4.jpg | "Switch to a top-down view."                       | Multiple-Angles     |
-| examples/4.jpg | "Switch to a wide-angle lens."                     | Multiple-Angles     |
+### **Usage**
 
-## Troubleshooting
+Once the web server deployment initiates, load the app locally by pointing your browser to the local network link (typically `[http://127.0.0.1:7860/](http://127.0.0.1:7860/)`).
 
-- **Adapter Loading Errors**: First selection downloads LoRA; check internet/repo. Console logs status.
-- **OOM on GPU**: Reduce steps/resolution; clear cache with `torch.cuda.empty_cache()`. FA3 fallback if incompatible.
-- **Dimension Issues**: Auto-resizes to 1024 max edge (aspect preserved); multiples of 8 enforced.
-- **No Output**: Ensure image uploaded; prompts must be descriptive.
-- **Queue Full**: Increase `max_size` in `demo.queue()`; 300s cache for edits.
-- **Gradio Rendering**: Set `ssr_mode=True` if gradients fail; CSS for container width.
+1. **Upload Asset:** Drop your source photo or asset directly into the dashed Iris uploader area. Clicking on an active image preview allows you to instantly replace it with a new file.
+2. **Select Style/LoRA:** Use the **Editing Style / LoRA** dropdown selector to choose your target adapter. The model will automatically trigger a lazy-load download of the chosen weights on its first use.
+3. **Refine Prompt:** Enter your specific edit instructions (e.g., *"Transform into anime"* or *"Rotate the camera 45 degrees to the left"*), or click on any of the **Quick Prompts** chips to instantly fill the input box.
+4. **Execute:** Click **Edit Image**. The loader overlay will animate, and once the 4-step diffusion pass completes, the final image will render with an option to download the output as a clean `.png` file.
 
-## Contributing
+### **Links and Source**
 
-Contributions encouraged! Fork the repo, add adapters to `ADAPTER_SPECS`, or enhance prompts, and submit PRs with tests. Focus areas:
-- More LoRA integrations.
-- Batch/single-step modes.
-- Negative prompt customization.
-
-Repository: [https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load.git](https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load.git)
-
-## License
-
-Apache License 2.0. See [LICENSE](LICENSE) for details.
-
-Built by [Prithiv Sakthi](https://github.com/PRITHIVSAKTHIUR). Report issues via the [repository](https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load/issues).
+* **License:** [Apache License 2.0](https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load/blob/main/LICENSE)
+* **GitHub Repository:** [https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load.git](https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load.git)
+* **Hugging Face Live Space:** [https://huggingface.co/spaces/prithivMLmods/Qwen-Image-Edit-2509-LoRAs-Fast](https://huggingface.co/spaces/prithivMLmods/Qwen-Image-Edit-2509-LoRAs-Fast)
