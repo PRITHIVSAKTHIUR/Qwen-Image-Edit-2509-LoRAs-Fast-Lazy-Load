@@ -4,6 +4,8 @@ Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load is an experimental, high-performance i
 
 The application features an adaptive **Lazy Loading architecture** for LoRA adapters. Weights for its 11+ specialized multi-angle, relighting, and illustration models are pulled and hot-fused into the inference state dynamically only upon request. The system is wrapped in a highly responsive, custom Iris-themed UI containing client-side JavaScript drag-and-drop mechanics, immediate example loading, and automated image parameter snapping.
 
+<img width="1711" height="1494" alt="image" src="https://github.com/user-attachments/assets/fed16128-171b-4588-b81c-db913e4555fd" />
+
 ### **Key Features**
 
 * **Lazy-Loaded LoRA Hub:** On-demand downloading and weight-fusing for 11+ pre-configured specialized LoRA adapters (including *Photo-to-Anime*, *Multiple-Angles*, *Light-Restoration*, *Relight*, *Multi-Angle-Lighting*, *Edit-Skin*, *Next-Scene*, *Flat-Log*, *Upscale-Image*, *Upscale2K*, and *Dotted-Illustration*).
