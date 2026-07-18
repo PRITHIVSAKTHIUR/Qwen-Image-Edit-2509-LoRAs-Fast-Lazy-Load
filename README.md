@@ -1,4 +1,4 @@
-# **Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load**
+# **[Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load](https://huggingface.co/spaces/prithivMLmods/Qwen-Image-Edit-2509-LoRAs-Fast)**
 
 Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load is an experimental, high-performance image editing and style-transfer sandbox built on top of the `Qwen/Qwen-Image-Edit-2509` base model. Powered by a deeply optimized transformer backbone (`prithivMLmods/Qwen-Image-Edit-Rapid-AIO-V4`) and accelerated via Flash Attention 3 (`QwenDoubleStreamAttnProcessorFA3`), this application delivers ultra-fast, 4-step image refinement directly in pixel space.
 
