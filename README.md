@@ -55,7 +55,7 @@ To set up the Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load environment locally, con
 
 * **Python Version:** Minimum Python **3.10** is required; Python **3.12** or **3.14** is highly recommended.
 * **PyTorch Version:** `torch==2.11.0` or above is required for best compatibility.
-* **CUDA Version:** CUDA **13.0** is recommended (`--extra-index-url [https://download.pytorch.org/whl/cu130](https://download.pytorch.org/whl/cu130)`), matching the environment used on the live Hugging Face demo.
+* **CUDA Version:** CUDA **13.0** is recommended (`--extra-index-url` [https://download.pytorch.org/whl/cu130](https://download.pytorch.org/whl/cu130)), matching the environment used on the live Hugging Face demo.
 
 #### **Running with `uv` (Recommended)**
 
