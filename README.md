@@ -1,18 +1,19 @@
 # **[Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load](https://huggingface.co/spaces/prithivMLmods/Qwen-Image-Edit-2509-LoRAs-Fast)**
 
-Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load is an experimental, high-performance image editing and style-transfer sandbox built on top of the `Qwen/Qwen-Image-Edit-2509` base model. Powered by a deeply optimized transformer backbone (`prithivMLmods/Qwen-Image-Edit-Rapid-AIO-V4`) and accelerated via Flash Attention 3 (`QwenDoubleStreamAttnProcessorFA3`), this application delivers ultra-fast, 4-step image refinement directly in pixel space.
+Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load is an experimental, high-performance image editing and style-transfer platform built on top of the `Qwen/Qwen-Image-Edit-2509` base model. It incorporates a custom, optimized transformer (`prithivMLmods/Qwen-Image-Edit-Rapid-AIO-V19`) and utilizes Flash Attention 3 (`QwenDoubleStreamAttnProcessorFA3`) to achieve low VRAM footprints and rapid 4-step image manipulation.
 
-The application features an adaptive **Lazy Loading architecture** for LoRA adapters. Weights for its 11+ specialized multi-angle, relighting, and illustration models are pulled and hot-fused into the inference state dynamically only upon request. The system is wrapped in a highly responsive, custom Iris-themed UI containing client-side JavaScript drag-and-drop mechanics, immediate example loading, and automated image parameter snapping.
+Featuring a **Lazy Loading** architecture for LoRA adapters, the application dynamically downloads and fuses specialized adapters—such as Photo-to-Anime, Multiple Angles, Light Restoration, Relight, Edit Skin, Next Scene, and Flat Log—on demand. The application is served via a custom, polished dark-themed Gradio web workspace with iris purple styling, featuring client-side JavaScript synchronization, single-image drop-zones, and rapid suggestion chips.
 
 <img width="1711" height="1494" alt="image" src="https://github.com/user-attachments/assets/fed16128-171b-4588-b81c-db913e4555fd" />
 
 ### **Key Features**
 
-* **Lazy-Loaded LoRA Hub:** On-demand downloading and weight-fusing for 11+ pre-configured specialized LoRA adapters (including *Photo-to-Anime*, *Multiple-Angles*, *Light-Restoration*, *Relight*, *Multi-Angle-Lighting*, *Edit-Skin*, *Next-Scene*, *Flat-Log*, *Upscale-Image*, *Upscale2K*, and *Dotted-Illustration*).
-* **Flash Attention 3 (FA3) Acceleration:** Wire-fused with a custom `QwenDoubleStreamAttnProcessorFA3` handler to drastically compress VRAM allocation and boost step-by-step cross-attention calculations.
-* **Smart Dimension Snapping:** Automatically scales uploaded reference images so that the longer side stays under 1024px while snapping both width and height to strict multiples of 8, preventing tensor geometry faults.
-* **Polished In-App Shell UI:** Replaces generic block items with a premium web console featuring deep slate and iris gradients, responsive action menus, custom suggestion chips, and zero-flicker launch button animations.
-* **Transient VRAM Governance:** Tailored for seamless integration with `spaces.GPU` context streams, executing full python-side trash collections (`gc.collect()`) and cache purges before and after every diffusion run.
+* **Lazy-Loaded Adapter Registry:** On-demand downloading and weight-fusing for 11+ specialized LoRA adapters (e.g., *Photo-to-Anime*, *Multiple-Angles*, *Light-Restoration*, *Relight*, *Multi-Angle-Lighting*, *Edit-Skin*, *Next-Scene*, *Flat-Log*, *Upscale-Image*, *Upscale2K*, and *Dotted-Illustration*).
+* **Flash Attention 3 (FA3) Acceleration:** Hooks natively into the `QwenDoubleStreamAttnProcessorFA3` processor layer to accelerate cross-attention inference phases while reducing active GPU memory consumption.
+* **Text-Guided Image Editing:** Offers camera angle rotations, shadow removal, uniform studio relighting, skin detail refinement, scene propagation, and 4K upscaling.
+* **Polished Dark-Mode Interface:** A modern web UI with an iris-purple aesthetic (`#5D3FD3`), client-side JavaScript event listeners, drag-and-drop file uploaders, live toast notifications, and animated status indicators.
+* **Smart Aspect Ratio Snapping:** Automatically resizes uploaded images to stay within 1024px while snapping width and height to multiples of 8 to prevent shape mismatch errors during inference.
+
 
 ### **Repository Structure**
 
@@ -50,15 +51,15 @@ The application features an adaptive **Lazy Loading architecture** for LoRA adap
 
 ### **Installation and Requirements**
 
-To initialize the Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load space locally, verify your host is configured with the specialized environment and compiled dependencies detailed below. A dedicated CUDA-compatible GPU is required.
+To set up the Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load environment locally, configure your system according to the specifications below. A modern CUDA-enabled GPU is required.
 
-* **Python Version:** Minimum Python **3.12** is needed, though Python **3.14** is recommended for peak optimization.
-* **PyTorch Version:** `torch==2.11.0` or above is required for cross-attention architecture compatibility.
-* **CUDA Hardware Layer:** CUDA **13.0** is recommended to mirror the live Hugging Face production environment.
+* **Python Version:** Minimum Python **3.10** is required; Python **3.12** or **3.14** is highly recommended.
+* **PyTorch Version:** `torch==2.11.0` or above is required for best compatibility.
+* **CUDA Version:** CUDA **13.0** is recommended (`--extra-index-url [https://download.pytorch.org/whl/cu130](https://download.pytorch.org/whl/cu130)`), matching the environment used on the live Hugging Face demo.
 
 #### **Running with `uv` (Recommended)**
 
-`uv` is an ultra-fast Python package and project manager written in Rust, which ensures rapid virtual environment synchronization and reproducible dependency execution loops.
+`uv` is an ultra-fast Python package and project manager written in Rust. It ensures rapid virtual environment setup and exact dependency synchronization based on the `uv.lock` file.
 
 **Step 1 — Install `uv`**
 
@@ -89,16 +90,16 @@ uv run app.py
 
 #### **Standard PIP Installation**
 
-**1. Upgrade Package Manager**
-Update your system installer prior to fetching modern pre-compiled wheel distributions:
+**1. Update Package Manager**
+Upgrade your local package manager:
 
 ```bash
 pip install pip>=26.1.2
 
 ```
 
-**2. Core Dependency Pull**
-Install the primary deep learning stack, core transformer builds, and layout engine libraries from your local `requirements.txt` file:
+**2. Install Core Dependencies**
+Install the primary deep learning stack, transformer libraries, and core computing utilities listed in `requirements.txt`:
 
 ```bash
 pip install -r requirements.txt
@@ -108,88 +109,33 @@ pip install -r requirements.txt
 #### **Core Requirements List (`requirements.txt`)**
 
 ```text
+--extra-index-url https://download.pytorch.org/whl/cu130
 torch==2.11.0
 torchvision==0.26.0
 transformers==5.14.1
 accelerate==1.14.0
 diffusers==0.39.0
 peft==0.19.1
-tokenizers==0.22.2
-sentencepiece==0.2.2
-safetensors==0.8.0
 gradio==6.20.0
-gradio-client==2.5.0
-hf-gradio==0.4.1
-spaces==0.51.0
-fastapi==0.139.1
-starlette==1.3.1
-uvicorn==0.51.0
-pydantic==2.12.5
-pydantic-core==2.41.5
-pydantic-settings==2.14.2
-typing-inspection==0.4.2
-python-multipart==0.0.32
-orjson==3.11.9
-httpx-sse==0.4.3
-websockets==16.1
-mcp==1.28.1
-platformdirs==4.10.0
-psutil==7.2.2
-regex==2026.7.10
-pillow==12.3.0
-av==18.0.0
-pydub==0.25.1
-authlib==1.7.2
-cryptography==49.0.0
-pyOpenSSL==26.3.0
-cffi==2.1.0
-pycparser==3.0
-email-validator==2.3.0
-dnspython==2.8.0
-python-dotenv==1.2.2
-itsdangerous==2.2.0
-pyjwt==2.13.0
-jsonschema==4.26.0
-jsonschema-specifications==2025.9.1
-referencing==0.37.0
-rpds-py==2026.6.3
-annotated-types==0.7.0
-semantic-version==2.10.0
-tomlkit==0.14.0
-importlib_metadata==9.0.0
-zipp==4.1.0
-pytz==2026.2
-safehttpx==0.1.7
-brotli==1.2.0
-groovy==0.1.2
-id==1.6.1
-joserfc==1.7.3
+av==17.1.0
+spaces==0.51.1
+huggingface-hub==1.24.0
 kernels==0.16.0
-kernels-data==0.16.0
-rfc3161-client==1.0.7
-rfc8785==0.1.4
-securesystemslib==1.4.0
-sigstore==4.4.0
-sigstore-models==0.0.6
-sigstore-rekor-types==0.0.18
-sse-starlette==3.4.5
-tuf==7.0.0
 
-# scientific computing
-numpy==2.4.6
 ```
 
 ### **Usage**
 
-Once the web server deployment initiates, load the app locally by pointing your browser to the local network link (typically `[http://127.0.0.1:7860/](http://127.0.0.1:7860/)`).
+Once the web deployment initializes, open your browser to the local address output in your terminal (typically `[http://127.0.0.1:7860/](http://127.0.0.1:7860/)`).
 
-1. **Upload Asset:** Drop your source photo or asset directly into the dashed Iris uploader area. Clicking on an active image preview allows you to instantly replace it with a new file.
-2. **Select Style/LoRA:** Use the **Editing Style / LoRA** dropdown selector to choose your target adapter. The model will automatically trigger a lazy-load download of the chosen weights on its first use.
-3. **Refine Prompt:** Enter your specific edit instructions (e.g., *"Transform into anime"* or *"Rotate the camera 45 degrees to the left"*), or click on any of the **Quick Prompts** chips to instantly fill the input box.
-4. **Execute:** Click **Edit Image**. The loader overlay will animate, and once the 4-step diffusion pass completes, the final image will render with an option to download the output as a clean `.png` file.
+1. **Upload Asset:** Drag and drop an image into the upload drop-zone (or click the preview window to replace the image).
+2. **Select Style / LoRA:** Choose your target editing task from the **Editing Style / LoRA** dropdown menu. The adapter weights will download lazily on first use.
+3. **Refine Instructions:** Type your instructions inside the prompt field, or click one of the **Quick Prompts** chips to instantly fill it.
+4. **Advanced Settings (Optional):** Expand the Advanced Settings panel to toggle seed randomization, scale structural guidance metrics, or adjust sampling steps.
+5. **Execute:** Click the **Edit Image** button (with the thunderbolt icon). The interface loader will blur the screen while the pipeline processes, displaying the final image upon completion.
 
 ### **Links and Source**
 
-* **License:** [Apache License 2.0](https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load/blob/main/LICENSE)
 * **GitHub Repository:** [https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load.git](https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load.git)
 * **Hugging Face Live Space:** [https://huggingface.co/spaces/prithivMLmods/Qwen-Image-Edit-2509-LoRAs-Fast](https://huggingface.co/spaces/prithivMLmods/Qwen-Image-Edit-2509-LoRAs-Fast)
+* **License:** [Apache License 2.0](https://github.com/PRITHIVSAKTHIUR/Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load/blob/main/LICENSE)
