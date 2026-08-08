@@ -4,6 +4,8 @@ Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load is a high-performance image editing an
 
 Using a **Lazy Loading** design for LoRA adapters, the system dynamically downloads and fuses task-specific adapters on demand—including Photo-to-Anime, Multiple Angles, Light Restoration, Relight, Multi-Angle Lighting, Edit Skin, Next Scene, Flat Log, and Upscaling. The web workspace is served via a custom, single-page web app built with a FastAPI backend server (`gradio.Server`) and a dark-mode frontend interface featuring a dual-view canvas, A/B comparison slider, history filmstrip, and interactive prompt suggestions.
 
+<img width="1919" height="1043" alt="image" src="https://github.com/user-attachments/assets/174a5031-43a7-46a1-ae5e-6f3b5e2ad76d" />
+
 ### **Key Features**
 
 * **Lazy-Loaded Adapter Registry:** On-demand downloading and weight-fusing for 11+ specialized LoRA adapters (e.g., *Photo-to-Anime*, *Multiple-Angles*, *Light-Restoration*, *Relight*, *Multi-Angle-Lighting*, *Edit-Skin*, *Next-Scene*, *Flat-Log*, *Upscale-Image*, *Upscale2K*, and *Dotted-Illustration*).
