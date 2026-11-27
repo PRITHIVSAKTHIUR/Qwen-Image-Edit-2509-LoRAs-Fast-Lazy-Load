@@ -8,7 +8,7 @@ Using a **Lazy Loading** design for LoRA adapters, the system dynamically downlo
 
 ### **Key Features**
 
-* **Lazy-Loaded Adapter Registry:** On-demand downloading and weight-fusing for 11+ specialized LoRA adapters (e.g., *Photo-to-Anime*, *Multiple-Angles*, *Light-Restoration*, *Relight*, *Multi-Angle-Lighting*, *Edit-Skin*, *Next-Scene*, *Flat-Log*, *Upscale-Image*, *Upscale2K*, and *Dotted-Illustration*).
+* **Lazy-Loaded Adapter Registry:** On-demand downloading and weight-fusing for 11 specialized LoRA adapters (e.g., *Photo-to-Anime*, *Multiple-Angles*, *Light-Restoration*, *Relight*, *Multi-Angle-Lighting*, *Edit-Skin*, *Next-Scene*, *Flat-Log*, *Upscale-Image*, *Upscale2K*, and *Dotted-Illustration*).
 * **Flash Attention 3 (FA3) Acceleration:** Hooks natively into the `QwenDoubleStreamAttnProcessorFA3` processor layer to accelerate cross-attention inference phases while reducing active GPU memory consumption.
 * **Text-Guided Image Editing:** Offers camera angle rotations, shadow removal, uniform studio relighting, skin detail refinement, scene propagation, and 4K upscaling.
 * **Studio SPA Interface:** An interactive single-page application built with modern vanilla web components—featuring an A/B image comparison slider, history filmstrip, quick prompt chips, and drag-and-drop file support.
@@ -53,7 +53,7 @@ Using a **Lazy Loading** design for LoRA adapters, the system dynamically downlo
 
 To set up the Qwen-Image-Edit-2509-LoRAs-Fast-Lazy-Load environment locally, configure your system according to the specifications below. A modern CUDA-enabled GPU is required.
 
-* **Python Version:** Minimum Python **3.12** is required; Python **3.12** or **3.14** is recommended.
+* **Python Version:** Python **3.14** or newer is required (`requires-python = ">=3.14"`).
 * **PyTorch Version:** `torch==2.11.0` or above is required for best compatibility.
 * **CUDA Version:** CUDA **13.0** is recommended (`--extra-index-url https://download.pytorch.org/whl/cu130`), matching the environment used on the live Hugging Face demo.
 
@@ -96,7 +96,7 @@ uv run app.py
 Upgrade your local package manager:
 
 ```bash
-pip install pip>=26.1.2
+pip install "pip>=26.2.1"
 
 ```
 
@@ -118,11 +118,11 @@ transformers==5.14.1
 accelerate==1.14.0
 diffusers==0.39.0
 peft==0.19.1
-gradio==6.22.0
+gradio==6.30.0
 av==17.1.0
-spaces==0.51.1
+spaces>=0.51.3
 huggingface-hub==1.24.0
-kernels==0.16.0
+kernels>=0.16.0
 
 ```
 
